@@ -19,10 +19,10 @@ const App = () => {
     const [playState, setPlayState] = useState(false);
 
     return (
-        <Router>
+        <Router basename="/">
             <Navbar />
             <Routes>
-                <Route path="/" element={<Navigate to="/homepage" replace />} />
+                <Route path="/" element={<Hero />} />
                 <Route path="/homepage" element={<Hero />} />
                 <Route
                     path="/programs"
