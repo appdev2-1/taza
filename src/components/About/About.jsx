@@ -1,41 +1,14 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import './About.css';
 import { Box, Grid, Typography, Card, CardMedia } from '@mui/material';
-import { storage } from '/src/components/firebase.js'; // Adjust the import based on your file structure
-import { getDownloadURL, ref } from 'firebase/storage';
+import faculty1 from '../../assets/DSC_6226.jpg';
+import faculty2 from '../../assets/DSC_6227.jpg';
+import faculty3 from '../../assets/DSC_6228.jpg';
+import schoolImg from '../../assets/DSC_6310.jpg';
+
+const facultyImages = [faculty1, faculty2, faculty3];
 
 const About = () => {
-    const [facultyImages, setFacultyImages] = useState([]);
-    const [schoolImage, setSchoolImage] = useState('');
-
-    useEffect(() => {
-        const loadImages = async () => {
-            // Update with your Firebase Storage image paths
-            const facultyImagePaths = [
-                'images/DSC_6226.jpg',
-                'images/DSC_6227.jpg',
-                'images/DSC_6228.jpg'
-            ];
-
-            const schoolImagePath = 'images/DSC_6310.jpg';
-
-            // Fetch faculty images
-            const facultyPromises = facultyImagePaths.map(async (path) => {
-                const imgRef = ref(storage, path);
-                return await getDownloadURL(imgRef);
-            });
-
-            const facultyUrls = await Promise.all(facultyPromises);
-            setFacultyImages(facultyUrls);
-
-            // Fetch school image
-            const schoolImgRef = ref(storage, schoolImagePath);
-            const schoolUrl = await getDownloadURL(schoolImgRef);
-            setSchoolImage(schoolUrl);
-        };
-
-        loadImages();
-    }, []);
 
     return (
         <Box sx={{ padding: 4, display: 'flex', flexDirection: { xs: 'column', md: 'row' } }}>
@@ -59,40 +32,32 @@ const About = () => {
                 <Box sx={{ marginTop: 4 }}>
                     <Typography variant="h5">Meet Our Faculty</Typography>
                     <Grid container spacing={2} sx={{ marginTop: 2 }}>
-                        {facultyImages.length > 0 ? (
-                            facultyImages.map((url, index) => (
-                                <Grid item xs={12} sm={6} md={4} key={index}>
-                                    <Card>
-                                        <CardMedia
-                                            component="img"
-                                            image={url}
-                                            alt={`Faculty Member ${index + 1}`}
-                                            sx={{ height: 200 }}
-                                        />
-                                    </Card>
-                                </Grid>
-                            ))
-                        ) : (
-                            <Typography variant="body1">Loading faculty images...</Typography>
-                        )}
+                        {facultyImages.map((url, index) => (
+                            <Grid item xs={12} sm={6} md={4} key={index}>
+                                <Card>
+                                    <CardMedia
+                                        component="img"
+                                        image={url}
+                                        alt={`Faculty Member ${index + 1}`}
+                                        sx={{ height: 200 }}
+                                    />
+                                </Card>
+                            </Grid>
+                        ))}
                     </Grid>
                 </Box>
 
                 {/* School Photo */}
                 <Box sx={{ marginTop: 4 }}>
                     <Typography variant="h5">Our Campus</Typography>
-                    {schoolImage ? (
-                        <Card>
-                            <CardMedia
-                                component="img"
-                                image={schoolImage}
-                                alt="School Campus"
-                                sx={{ height: 300 }}
-                            />
-                        </Card>
-                    ) : (
-                        <Typography variant="body1">Loading school image...</Typography>
-                    )}
+                    <Card>
+                        <CardMedia
+                            component="img"
+                            image={schoolImg}
+                            alt="School Campus"
+                            sx={{ height: 300 }}
+                        />
+                    </Card>
                 </Box>
             </Box>
         </Box>

@@ -3,20 +3,18 @@ import react from '@vitejs/plugin-react';
 
 export default defineConfig({
   plugins: [react()],
-  assetsInclude: ['**/*.glb'],  // Include .glb files as assets
-  root: '.',  // Root directory
+  assetsInclude: ['**/*.glb'],
+  base: '/',
   build: {
-    outDir: 'dist',  // Output directory for production build
-    chunkSizeWarningLimit: 10000,  // Increase chunk size warning limit (in kB)
+    outDir: 'dist',
     rollupOptions: {
-      input: 'index.html',  // Specify the correct entry point
       output: {
         manualChunks(id) {
-          // Group all node_modules into a single chunk
           if (id.includes('node_modules')) {
+            if (id.includes('@mui')) return 'mui';
+            if (id.includes('react')) return 'react';
             return 'vendor';
           }
-          // You can add more conditions here to further customize chunking
         },
       },
     },

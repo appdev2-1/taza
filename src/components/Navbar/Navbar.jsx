@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { AppBar, Toolbar, IconButton, Button, Drawer, List, ListItem, useMediaQuery, Box } from '@mui/material';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { useTheme } from '@mui/material/styles';
-import CakeIcon from '@mui/icons-material/Cake';
+import MenuIcon from '@mui/icons-material/Menu';
 import { styled } from '@mui/system';
 import logo from '../../assets/logo.jpg';
 
@@ -65,48 +65,51 @@ const Navbar = () => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const [mobileOpen, setMobileOpen] = useState(false);
+  const location = useLocation();
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };
 
+  const isActive = (path) => location.pathname === path;
+
+  const navItems = [
+    { label: 'Home', path: '/Homepage' },
+    { label: 'Programs', path: '/programs' },
+    { label: 'About Us', path: '/about' },
+    { label: 'Campus', path: '/campus' },
+    { label: 'Testimonials', path: '/testimonials' },
+    { label: 'Contact Us', path: '/contact' },
+  ];
+
   const drawer = (
-      <List onClick={handleDrawerToggle}>
-        <ListItem>
-          <GlowingButton component={Link} to="/Homepage">
-            Home
-          </GlowingButton>
-        </ListItem>
-        <ListItem>
-          <GlowingButton component={Link} to="/programs">
-            Programs
-          </GlowingButton>
-        </ListItem>
-        <ListItem>
-          <GlowingButton component={Link} to="/about">
-            About Us
-          </GlowingButton>
-        </ListItem>
-        <ListItem>
-          <GlowingButton component={Link} to="/campus">
-            Campus
-          </GlowingButton>
-        </ListItem>
-        <ListItem>
-          <GlowingButton component={Link} to="/testimonials">
-            Testimonials
-          </GlowingButton>
-        </ListItem>
-        <ListItem>
-          <GlowingButton component={Link} to="/contact">
-            Contact Us
-          </GlowingButton>
-        </ListItem>
+      <List onClick={handleDrawerToggle} sx={{ width: 250, pt: 8 }}>
+        {navItems.map((item) => (
+          <ListItem key={item.path} sx={{ py: 0 }}>
+            <GlowingButton 
+              component={Link} 
+              to={item.path}
+              fullWidth
+              sx={{
+                justifyContent: 'flex-start',
+                backgroundColor: isActive(item.path) ? '#1a2380' : '#0b0a0a',
+              }}
+            >
+              {item.label}
+            </GlowingButton>
+          </ListItem>
+        ))}
       </List>
   );
 
   return (
-      <AppBar position="fixed" sx={{ boxShadow: 'none', padding: '10px 0', backgroundColor: '#0b1c8a' }}>
+      <AppBar position="fixed" sx={{ 
+        boxShadow: 'none', 
+        padding: '10px 0', 
+        backgroundColor: '#0b1c8a',
+        backdropFilter: 'blur(10px)',
+        transition: 'all 0.3s ease'
+      }}>
         <Toolbar sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <Box component={Link} to="/" sx={{ display: 'flex', alignItems: 'center', textDecoration: 'none' }}>
             <img src={logo} alt="Logo" style={{ width: '80px', height: '80px', objectFit: 'contain' }} />
@@ -115,32 +118,33 @@ const Navbar = () => {
           {isMobile ? (
               <>
                 <IconButton edge="start" color="inherit" aria-label="menu" onClick={handleDrawerToggle}>
-                  <CakeIcon style={{ fontSize: '30px' }} />
+                  <MenuIcon style={{ fontSize: '30px' }} />
                 </IconButton>
-                <Drawer anchor="right" open={mobileOpen} onClose={handleDrawerToggle}>
+                <Drawer 
+                  anchor="right" 
+                  open={mobileOpen} 
+                  onClose={handleDrawerToggle}
+                  PaperProps={{
+                    sx: { backgroundColor: '#0b1c8a' }
+                  }}
+                >
                   {drawer}
                 </Drawer>
               </>
           ) : (
               <>
-                <GlowingButton component={Link} to="/Homepage">
-                  Home
-                </GlowingButton>
-                <GlowingButton component={Link} to="/programs">
-                  Programs
-                </GlowingButton>
-                <GlowingButton component={Link} to="/about">
-                  About Us
-                </GlowingButton>
-                <GlowingButton component={Link} to="/campus">
-                  Campus
-                </GlowingButton>
-                <GlowingButton component={Link} to="/testimonials">
-                  Testimonials
-                </GlowingButton>
-                <GlowingButton component={Link} to="/contact">
-                  Contact Us
-                </GlowingButton>
+                {navItems.map((item) => (
+                  <GlowingButton 
+                    key={item.path}
+                    component={Link} 
+                    to={item.path}
+                    sx={{
+                      backgroundColor: isActive(item.path) ? '#1a2380' : '#0b0a0a',
+                    }}
+                  >
+                    {item.label}
+                  </GlowingButton>
+                ))}
               </>
           )}
         </Toolbar>

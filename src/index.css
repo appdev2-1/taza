@@ -1,20 +1,36 @@
  
  @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap');
+ @import './design-system.css';
 
  *{
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: "Outfit", sans-serif;
+  font-family: var(--font-body);
  }
+
+ html {
+  scroll-behavior: smooth;
+ }
+
  body{
-  background: #F5F5F5;
+  background: var(--background);
+  color: var(--text-primary);
+  line-height: 1.6;
  }
+
+ h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  letter-spacing: 0.5px;
+ }
+
  a{
   text-decoration: none;
   color: inherit;
   line-height: 1;
   cursor: pointer;
+  transition: all 0.3s ease;
  }
 
 
@@ -25,17 +41,24 @@
  }
 
  .btn{
-    background: #FFF;
-    color: #212121;
+    background: var(--white);
+    color: var(--text-primary);
     padding: 14px 25px;
     font-size: 16px;
-    border-radius: 30px;
+    border-radius: var(--radius-full);
     cursor: pointer;
     border: 0;
     outline: 0;
     display: inline-flex;
     align-items: center;
     justify-content: center;
+    transition: all 0.3s ease;
+    box-shadow: var(--shadow-sm);
+ }
+
+ .btn:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
  }
 
  .btn img{
@@ -43,8 +66,21 @@
     margin-left: 10px;
  }
  .btn.dark-btn{
-    background: #212EA0;
-    color: #fff;
+    background: var(--primary);
+    color: var(--white);
+ }
+
+ .btn.dark-btn:hover {
+    background: var(--primary-dark);
+ }
+
+ .btn.accent-btn {
+    background: var(--accent);
+    color: var(--white);
+ }
+
+ .btn.accent-btn:hover {
+    background: #e55a2a;
  }
 
 

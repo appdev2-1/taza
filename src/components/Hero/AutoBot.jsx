@@ -1,230 +1,108 @@
-import React, { useState, useEffect } from 'react';
-import { Box, Button, Fade, Typography, IconButton, TextField, CircularProgress } from '@mui/material';
+import React, { useState } from 'react';
+import { Box, IconButton, Fade, Typography, TextField, Button } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
+import ChatIcon from '@mui/icons-material/Chat';
 import CloseIcon from '@mui/icons-material/Close';
+import SendIcon from '@mui/icons-material/Send';
 
 const AutoBot = () => {
-    const [visible, setVisible] = useState(true);
-    const [messages, setMessages] = useState([]);
-    const [userInput, setUserInput] = useState('');
-    const [isTyping, setIsTyping] = useState(false);
-    const [showFeedback, setShowFeedback] = useState(false);
+    const [open, setOpen] = useState(false);
+    const [messages, setMessages] = useState([{ text: '👋 Hi! How can I help you today?', bot: true }]);
+    const [input, setInput] = useState('');
     const navigate = useNavigate();
 
-    useEffect(() => {
-        const messageQueue = [
-            "👋 Hi there! Welcome to Tazalin College.",
-            "✨ Explore our amazing programs and find the right fit for you.",
-            "🌟 Check out our Testimonials to see what our students are saying!",
-            "📞 Need help? Feel free to contact us anytime.",
-            "🎓 Want to apply? Click 'Apply Now' below!"
-        ];
-
-        const timer = setInterval(() => {
-            if (messageQueue.length > 0) {
-                setMessages((prev) => [...prev, messageQueue.shift()]);
-            } else {
-                clearInterval(timer);
-            }
-        }, 3000);
-
-        return () => clearInterval(timer);
-    }, []);
-
-    const handleNavigation = (path) => {
-        navigate(path);
-        setVisible(false);
+    const handleSend = () => {
+        if (!input.trim()) return;
+        setMessages([...messages, { text: input, bot: false }]);
+        const response = getBotResponse(input);
+        setTimeout(() => setMessages(prev => [...prev, { text: response, bot: true }]), 500);
+        setInput('');
     };
 
-    const handleClose = () => {
-        setVisible(false);
-    };
-
-    const handleReopen = () => {
-        setVisible(true);
-        setMessages([]);
-        const messageQueue = [
-            "👋 Hi there! Welcome back to Tazalin College.",
-            "✨ Explore our amazing programs and find the right fit for you.",
-            "🌟 Check out our Testimonials to see what our students are saying!",
-            "📞 Need help? Feel free to contact us anytime.",
-            "🎓 Want to apply? Click 'Apply Now' below!"
-        ];
-        const timer = setInterval(() => {
-            if (messageQueue.length > 0) {
-                setMessages((prev) => [...prev, messageQueue.shift()]);
-            } else {
-                clearInterval(timer);
-            }
-        }, 3000);
-    };
-
-    const handleSendMessage = () => {
-        if (userInput.trim() !== '') {
-            setMessages((prev) => [...prev, `You: ${userInput}`]);
-            setUserInput('');
-            setIsTyping(true);
-            setTimeout(() => {
-                const botResponse = getBotResponse(userInput);
-                setMessages((prev) => [...prev, botResponse]);
-                setIsTyping(false);
-                setShowFeedback(true);
-            }, 1000);
-        }
-    };
-
-    const getBotResponse = (input) => {
-        if (input.toLowerCase().includes('programs')) {
-            return "We offer various programs including Barista, Nurse Assistant, Beauty, and Mixology!";
-        } else if (input.toLowerCase().includes('testimonials')) {
-            return "Our students love their experiences here! Check out our Testimonials page.";
-        } else if (input.toLowerCase().includes('contact')) {
-            return "You can contact us via the Contact Us page or call us directly!";
-        } else {
-            return "I'm here to help! You can ask about our programs or testimonials.";
-        }
-    };
-
-    const handleQuickReply = (message) => {
-        setUserInput(message);
-        handleSendMessage();
-    };
-
-    const handleFeedback = (isHelpful) => {
-        setShowFeedback(false);
-        alert(isHelpful ? 'Thank you for your feedback!' : 'Sorry to hear that! We will improve.');
+    const getBotResponse = (msg) => {
+        const lower = msg.toLowerCase();
+        if (lower.includes('program')) return '🎓 We offer Barista, Nurse Assistant, Beauty, Mixology & more!';
+        if (lower.includes('contact')) return '📞 Call +254732041103 or email tazalin.college@gmail.com';
+        if (lower.includes('apply')) return '✨ Click the Apply button to get started!';
+        return '💬 Ask about programs, contact info, or how to apply!';
     };
 
     return (
-        <Fade in={visible} timeout={500}>
-            <Box
+        <>
+            <IconButton
+                onClick={() => setOpen(!open)}
                 sx={{
                     position: 'fixed',
-                    bottom: '20px',
-                    right: '20px',
-                    backgroundColor: '#f5f5f5',
-                    boxShadow: 3,
-                    borderRadius: '16px',
-                    padding: '16px',
-                    width: '300px',
+                    bottom: 90,
+                    right: 24,
                     zIndex: 1000,
-                    border: '2px solid #030e73',
+                    background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                    color: '#fff',
+                    width: 56,
+                    height: 56,
+                    boxShadow: '0 4px 20px rgba(102, 126, 234, 0.4)',
+                    '&:hover': {
+                        transform: 'scale(1.1)',
+                        boxShadow: '0 6px 30px rgba(102, 126, 234, 0.6)',
+                    },
                 }}
             >
-                <Box display="flex" justifyContent="space-between" alignItems="center">
-                    <Typography variant="h6" sx={{ fontWeight: 'bold', color: '#030e73' }}>
-                        AutoBot
-                    </Typography>
-                    <IconButton onClick={handleClose}>
-                        <CloseIcon sx={{ color: '#030e73' }} />
-                    </IconButton>
-                </Box>
-                <Box sx={{ maxHeight: '200px', overflowY: 'auto', marginBottom: 2 }}>
-                    {messages.map((message, index) => (
-                        <Typography key={index} variant="body2" sx={{ marginBottom: 1, color: '#333' }}>
-                            {message}
-                        </Typography>
-                    ))}
-                    {isTyping && (
-                        <Box display="flex" alignItems="center">
-                            <CircularProgress size={20} sx={{ marginRight: 1 }} />
-                            <Typography variant="body2">...</Typography>
-                        </Box>
-                    )}
-                </Box>
-                <TextField
-                    variant="outlined"
-                    placeholder="Type your message..."
-                    value={userInput}
-                    onChange={(e) => setUserInput(e.target.value)}
-                    onKeyPress={(e) => {
-                        if (e.key === 'Enter') {
-                            handleSendMessage();
-                        }
-                    }}
+                {open ? <CloseIcon /> : <ChatIcon />}
+            </IconButton>
+
+            <Fade in={open}>
+                <Box
                     sx={{
-                        marginBottom: 1,
-                        '& .MuiOutlinedInput-root': {
-                            '& fieldset': {
-                                borderColor: '#030e73',
-                            },
-                            '&:hover fieldset': {
-                                borderColor: '#030e73',
-                            },
-                            '&.Mui-focused fieldset': {
-                                borderColor: '#030e73',
-                            },
-                        },
+                        position: 'fixed',
+                        bottom: 160,
+                        right: 24,
+                        width: 320,
+                        height: 400,
+                        background: '#fff',
+                        borderRadius: '16px',
+                        boxShadow: '0 8px 32px rgba(0,0,0,0.15)',
+                        zIndex: 999,
+                        display: 'flex',
+                        flexDirection: 'column',
                     }}
-                    fullWidth
-                />
-                <Button
-                    variant="contained"
-                    sx={{ backgroundColor: '#030e73', '&:hover': { backgroundColor: '#002a5c' } }}
-                    onClick={handleSendMessage}
-                    fullWidth
                 >
-                    Send
-                </Button>
-                <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 1 }}>
-                    <Button
-                        variant="contained"
-                        sx={{ backgroundColor: '#030e73', '&:hover': { backgroundColor: '#002a5c' } }}
-                        size="small"
-                        onClick={() => handleQuickReply('What programs do you offer?')}
-                    >
-                        Programs
-                    </Button>
-                    <Button
-                        variant="contained"
-                        sx={{ backgroundColor: '#030e73', '&:hover': { backgroundColor: '#002a5c' } }}
-                        size="small"
-                        onClick={() => handleQuickReply('Show me the testimonials.')}
-                    >
-                        Testimonials
-                    </Button>
-                </Box>
-                {showFeedback && (
-                    <Box sx={{ mt: 1 }}>
-                        <Typography variant="body2">Was this helpful?</Typography>
-                        <Button variant="contained" sx={{ backgroundColor: '#030e73' }} size="small" onClick={() => handleFeedback(true)}>👍</Button>
-                        <Button variant="contained" sx={{ backgroundColor: '#030e73' }} size="small" onClick={() => handleFeedback(false)}>👎</Button>
+                    <Box sx={{ p: 2, background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)', borderRadius: '16px 16px 0 0' }}>
+                        <Typography variant="h6" sx={{ color: '#fff', fontWeight: 'bold' }}>Tazalin Assistant</Typography>
                     </Box>
-                )}
-                <Button
-                    variant="contained"
-                    sx={{ backgroundColor: '#030e73', '&:hover': { backgroundColor: '#002a5c' }, mb: 1 }}
-                    onClick={() => handleNavigation('/programs')}
-                    fullWidth
-                >
-                    Explore Programs
-                </Button>
-                <Button
-                    variant="contained"
-                    sx={{ backgroundColor: '#030e73', '&:hover': { backgroundColor: '#002a5c' }, mb: 1 }}
-                    onClick={() => handleNavigation('/testimonials')}
-                    fullWidth
-                >
-                    View Testimonials
-                </Button>
-                <Button
-                    variant="contained"
-                    sx={{ backgroundColor: '#030e73', '&:hover': { backgroundColor: '#002a5c' }, mb: 1 }}
-                    onClick={() => handleNavigation('/contact')}
-                    fullWidth
-                >
-                    Contact Us
-                </Button>
-                <Button
-                    variant="outlined"
-                    sx={{ borderColor: '#030e73', color: '#030e73', '&:hover': { borderColor: '#002a5c' } }}
-                    onClick={handleReopen}
-                    fullWidth
-                >
-                    Reopen Chat
-                </Button>
-            </Box>
-        </Fade>
+                    <Box sx={{ flex: 1, overflowY: 'auto', p: 2 }}>
+                        {messages.map((msg, i) => (
+                            <Box key={i} sx={{ mb: 1, textAlign: msg.bot ? 'left' : 'right' }}>
+                                <Typography
+                                    sx={{
+                                        display: 'inline-block',
+                                        p: 1.5,
+                                        borderRadius: 2,
+                                        maxWidth: '80%',
+                                        background: msg.bot ? '#f0f0f0' : '#667eea',
+                                        color: msg.bot ? '#333' : '#fff',
+                                    }}
+                                >
+                                    {msg.text}
+                                </Typography>
+                            </Box>
+                        ))}
+                    </Box>
+                    <Box sx={{ p: 2, display: 'flex', gap: 1 }}>
+                        <TextField
+                            size="small"
+                            fullWidth
+                            value={input}
+                            onChange={(e) => setInput(e.target.value)}
+                            onKeyPress={(e) => e.key === 'Enter' && handleSend()}
+                            placeholder="Type a message..."
+                        />
+                        <IconButton onClick={handleSend} sx={{ background: '#667eea', color: '#fff', '&:hover': { background: '#764ba2' } }}>
+                            <SendIcon />
+                        </IconButton>
+                    </Box>
+                </Box>
+            </Fade>
+        </>
     );
 };
 

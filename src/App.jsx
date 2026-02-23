@@ -11,9 +11,9 @@ import Contact from './components/Contact/Contact';
 import Footer from './components/Footer/Footer';
 import ApplicationForm from './components/Hero/ApplicationForm';
 import AutoBot from './components/Hero/AutoBot';
+import StickyApplyButton from './components/StickyApplyButton';
+import BackToTop from './components/BackToTop';
 
-// Import Firebase configuration
-import './components/firebase.js';
 
 const App = () => {
     const [playState, setPlayState] = useState(false);
@@ -73,6 +73,8 @@ const App = () => {
             </Routes>
             <Footer />
         <AutoBot/>
+        <StickyApplyButton />
+        <BackToTop />
         </Router>
     );
 };

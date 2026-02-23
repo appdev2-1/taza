@@ -1,19 +1,24 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import './Programs.css';
-import { storage } from '/src/components/firebase';
-import { ref, getDownloadURL } from "firebase/storage";
+import { Grid, Button, Container, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/material';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
-import { Grid, Button, Container, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, CircularProgress } from '@mui/material';
 import FacebookIcon from '@mui/icons-material/Facebook';
 import TwitterIcon from '@mui/icons-material/Twitter';
 import InstagramIcon from '@mui/icons-material/Instagram';
 import LinkedInIcon from '@mui/icons-material/LinkedIn';
+import barista5 from '../../assets/barista (5).jpg';
+import caregiving from '../../assets/caregiving.jpg';
+import mixology from '../../assets/mixology.jpg';
+import DSC_6240 from '../../assets/DSC_6240.jpg';
+import icon1 from '../../assets/program-icon-1.png';
+import icon2 from '../../assets/program-icon-2.png';
+import icon3 from '../../assets/program-icon-3.png';
 
 const programsData = [
   {
     title: "Barista Training",
-    iconPath: "images/program-icon-1.png",
-    imagePath: "images/barista (5).jpg",
+    icon: icon1,
+    image: barista5,
     description: "Learn the art of coffee making and customer service.",
     fee: "20,500/- per Term",
     duration: "1 month",
@@ -21,8 +26,8 @@ const programsData = [
   },
   {
     title: "Certified Nurse Assistant",
-    iconPath: "images/program-icon-2.png",
-    imagePath: "images/caregiving.jpg",
+    icon: icon2,
+    image: caregiving,
     description: "Gain the skills needed to assist in patient care.",
     fee: "17,500/- per Term (First Aid Care 3,000/-)",
     duration: "4 months",
@@ -30,8 +35,8 @@ const programsData = [
   },
   {
     title: "Mixology",
-    iconPath: "images/program-icon-3.png",
-    imagePath: "images/mixology.jpg",
+    icon: icon3,
+    image: mixology,
     description: "Master the craft of cocktail mixing and presentation.",
     fee: "20,500/-",
     duration: "1 month",
@@ -39,8 +44,8 @@ const programsData = [
   },
   {
     title: "Certificate in Plumbing & Pipe Fitting",
-    iconPath: "images/program-icon4.png",
-    imagePath: "images/plumbing.jpg",
+    icon: icon1,
+    image: barista5,
     description: "Learn plumbing and pipe fitting techniques for various settings.",
     fee: "11,000/- per Term",
     duration: "3 terms",
@@ -48,8 +53,8 @@ const programsData = [
   },
   {
     title: "Hospitality Management",
-    iconPath: "images/program-icon5.png",
-    imagePath: "images/DSC_6240.jpg",
+    icon: icon2,
+    image: DSC_6240,
     description: "Develop skills in hospitality and customer relations.",
     fee: "20,500/-",
     duration: "4 terms",
@@ -57,8 +62,8 @@ const programsData = [
   },
   {
     title: "Front Office",
-    iconPath: "images/program-icon6.png",
-    imagePath: "images/frontoffice.jpg",
+    icon: icon3,
+    image: DSC_6240,
     description: "Training in front office operations and management.",
     fee: "19,000/-",
     duration: "4 terms",
@@ -66,8 +71,8 @@ const programsData = [
   },
   {
     title: "German Language",
-    iconPath: "images/program-icon7.jpeg",
-    imagePath: "images/german.jpg",
+    icon: icon1,
+    image: caregiving,
     description: "Learn German language skills for communication.",
     fee: "20,000/-",
     duration: "1 term",
@@ -75,8 +80,8 @@ const programsData = [
   },
   {
     title: "Baking and Pastry",
-    iconPath: "images/program-icon8.jpeg",
-    imagePath: "images/baking.jpg",
+    icon: icon2,
+    image: mixology,
     description: "Hands-on training in baking and pastry creation.",
     fee: "28,000/-",
     duration: "1 term",
@@ -84,8 +89,8 @@ const programsData = [
   },
   {
     title: "Computer Packages",
-    iconPath: "images/program-icon9.png",
-    imagePath: "images/computer.jpg",
+    icon: icon3,
+    image: barista5,
     description: "Basic to advanced computer applications.",
     fee: "4,500/-",
     duration: "1 month",
@@ -94,44 +99,11 @@ const programsData = [
 ];
 
 const Programs = () => {
-  const [programs, setPrograms] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-
-  useEffect(() => {
-    const fetchImagesAndIcons = async () => {
-      try {
-        const updatedPrograms = await Promise.all(
-            programsData.map(async (program) => {
-              const imageRef = ref(storage, program.imagePath); // Use the new imagePath key
-              const imageUrl = await getDownloadURL(imageRef);
-
-              const iconRef = ref(storage, program.iconPath);
-              const iconUrl = await getDownloadURL(iconRef);
-
-              return { ...program, image: imageUrl, icon: iconUrl }; // Include the image URL and icon URL
-            })
-        );
-        setPrograms(updatedPrograms);
-      } catch (err) {
-        console.error("Error fetching images and icons:", err);
-        setError("Error fetching program images. Please try again later.");
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchImagesAndIcons();
-  }, []);
-
-  if (loading) return <CircularProgress />;
-  if (error) return <p>{error}</p>;
-
   return (
       <section className='programs-section'>
         <h1>Our Programs</h1>
         <Grid container spacing={3} className='programs'>
-          {programs.map((program, index) => (
+          {programsData.map((program, index) => (
               <Grid item xs={12} sm={6} md={4} key={index}>
                 <div className="program">
                   <img
@@ -187,7 +159,7 @@ const Programs = () => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {programs.map((row, index) => (
+                {programsData.map((row, index) => (
                     <TableRow key={index}>
                       <TableCell>{row.title}</TableCell>
                       <TableCell>{row.examBody}</TableCell>

@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { Grid, Typography, Container, Box, Button, CircularProgress } from '@mui/material';
+import React, { useState } from 'react';
+import { Grid, Typography, Container, Box, Button } from '@mui/material';
 import FacebookIcon from '@mui/icons-material/Facebook';
 import TwitterIcon from '@mui/icons-material/Twitter';
 import InstagramIcon from '@mui/icons-material/Instagram';
@@ -8,13 +8,22 @@ import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import ApplicationForm from './ApplicationForm';
-import { storage } from '/src/components/firebase.js';
-import { getDownloadURL, ref } from 'firebase/storage';
-import AutoBot from './AutoBot';
-const HeroSection = ({ onApplyClick }) => {
-    const [campusImages, setCampusImages] = useState([]);
-    const [loadingImages, setLoadingImages] = useState(true);
+import TypingAnimation from '../TypingAnimation';
+import ScrollIndicator from '../ScrollIndicator';
+import DSC_6194 from '../../assets/DSC_6194.jpg';
+import DSC_6270 from '../../assets/DSC_6270.jpg';
+import DSC_6310 from '../../assets/DSC_6310.jpg';
+import homeImg from '../../assets/home.jpg';
+import barista1 from '../../assets/barista (1).jpg';
+import caregiving from '../../assets/caregiving.jpg';
+import DSC_6242 from '../../assets/DSC_6242.jpg';
+import mixology from '../../assets/mixology.jpg';
+import DSC_6240 from '../../assets/DSC_6240.jpg';
 
+const campusImages = [DSC_6194, DSC_6270, DSC_6310, homeImg];
+const programImages = [barista1, caregiving, DSC_6242, mixology, DSC_6240, DSC_6240];
+
+const HeroSection = ({ onApplyClick }) => {
     const settings = {
         dots: true,
         infinite: true,
@@ -24,33 +33,6 @@ const HeroSection = ({ onApplyClick }) => {
         autoplay: true,
         autoplaySpeed: 3000,
     };
-
-    const imageFiles = ['DSC_6194.jpg', 'DSC_6270.jpg', 'DSC_6310.jpg', 'home.jpg'];
-
-    useEffect(() => {
-        const fetchImages = async () => {
-            try {
-                const urls = await Promise.all(
-                    imageFiles.map(fileName => {
-                        const imageRef = ref(storage, `images/${fileName}`);
-                        console.log(`Fetching image from: ${imageRef.fullPath}`);
-                        return getDownloadURL(imageRef);
-                    })
-                );
-                setCampusImages(urls);
-            } catch (error) {
-                console.error("Error fetching campus images: ", error.message);
-            } finally {
-                setLoadingImages(false);
-            }
-        };
-
-        fetchImages().then(r =>{} );
-    }, []);
-
-    if (loadingImages) {
-        return <Typography variant="h6" align="center">Loading...</Typography>;
-    }
 
     return (
         <Box sx={{ position: 'relative', height: '80vh', overflow: 'hidden' }}>
@@ -72,7 +54,7 @@ const HeroSection = ({ onApplyClick }) => {
                     left: 0,
                     right: 0,
                     bottom: 0,
-                    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+                    backgroundColor: 'rgba(0, 0, 0, 0.3)',
                     display: 'flex',
                     flexDirection: 'column',
                     justifyContent: 'center',
@@ -81,16 +63,32 @@ const HeroSection = ({ onApplyClick }) => {
                     textAlign: 'center',
                 }}
             >
-                <Typography variant="h3" sx={{ fontWeight: 'bold' }}>
-                    Welcome to Tazalin College
+                <TypingAnimation 
+                    texts={[
+                        'Welcome to Tazalin College',
+                        'Your Future Starts Here',
+                        'Explore Your Potential'
+                    ]} 
+                />
+                <Typography variant="h6" sx={{ marginBottom: 2, mt: 2 }}>
+                    Join us and transform your career with industry-leading programs.
                 </Typography>
-                <Typography variant="h6" sx={{ marginBottom: 2 }}>
-                    Your future starts here. Join us and explore your potential.
-                </Typography>
-                <Button variant="contained" color="primary" size="large" onClick={onApplyClick}>
+                <Button 
+                    variant="contained" 
+                    size="large" 
+                    onClick={onApplyClick}
+                    sx={{
+                        background: '#FF6B35',
+                        '&:hover': { background: '#e55a2a' },
+                        px: 4,
+                        py: 1.5,
+                        fontSize: '18px',
+                        fontWeight: 600,
+                    }}
+                >
                     Apply Now
                 </Button>
-                <AutoBot />
+                <ScrollIndicator />
             </Box>
         </Box>
     );
@@ -103,54 +101,25 @@ const ProgramCard = ({ imageUrl, title, details }) => (
                 padding: 2,
                 backgroundColor: '#f4f4f4',
                 textAlign: 'center',
+                borderRadius: '12px',
+                transition: 'all 0.3s ease',
                 '&:hover': {
-                    backgroundColor: '#ddd',
+                    backgroundColor: '#fff',
+                    transform: 'translateY(-8px)',
+                    boxShadow: '0 8px 24px rgba(0,0,0,0.15)',
                 },
             }}
         >
-            <img src={imageUrl} alt={title} width="100%" loading="lazy"/>
-            <Typography variant="h6">{title}</Typography>
-            <Typography>{details}</Typography>
+            <img src={imageUrl} alt={title} width="100%" loading="lazy" style={{ borderRadius: '8px' }}/>
+            <Typography variant="h6" sx={{ mt: 2, fontWeight: 'bold' }}>{title}</Typography>
+            <Box component="ul" sx={{ textAlign: 'left', pl: 2 }}>
+                {details}
+            </Box>
         </Box>
     </Grid>
 );
 
 const Programs = () => {
-    const [programImages, setProgramImages] = useState([]);
-    const [loadingPrograms, setLoadingPrograms] = useState(true);
-
-    useEffect(() => {
-        const fetchProgramImages = async () => {
-            const programFiles = ['barista (1).jpg', 'caregiving.jpg', 'DSC_6242.jpg', 'mixology.jpg','plumbing.jpg','DSC_6240.jpg'];
-            try {
-                const urls = await Promise.all(
-                    programFiles.map(fileName => {
-                        const programRef = ref(storage, `images/${fileName}`);
-                        console.log(`Fetching program image from: ${programRef.fullPath}`);
-                        return getDownloadURL(programRef);
-                    })
-                );
-                setProgramImages(urls);
-            } catch (error) {
-                console.error("Error fetching program images: ", error.message);
-                setError(error.message); // Optionally add error handling in the state
-            } finally {
-                setLoadingPrograms(false);
-            }
-        };
-
-        fetchProgramImages().then(r => {});
-    }, []);
-
-
-    if (loadingPrograms) {
-        return (
-            <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '80vh' }}>
-                <CircularProgress />
-            </Box>
-        );
-    }
-
     return (
         <Container sx={{ padding: '32px 0' }}>
             <Typography variant="h4" align="center" gutterBottom>
@@ -206,18 +175,18 @@ const HomePage = () => {
                         </Grid>
                         <Grid item xs={12} sm={4}>
                             <Typography variant="h6">Follow Us</Typography>
-                            <Box sx={{ display: 'flex', justifyContent: 'space-around', color: '#EBECFE' }}>
-                                <a href="https://www.facebook.com/TazalinCollege" target="_blank" rel="noopener noreferrer">
-                                    <FacebookIcon />
+                            <Box sx={{ display: 'flex', justifyContent: 'space-around', mt: 1 }}>
+                                <a href="https://www.facebook.com/TazalinCollege" target="_blank" rel="noopener noreferrer" style={{ transition: 'all 0.3s' }}>
+                                    <FacebookIcon sx={{ fontSize: 32, color: '#EBECFE', '&:hover': { color: '#1877f2', transform: 'scale(1.2)' } }} />
                                 </a>
-                                <a href="https://twitter.com/TazalinCollege" target="_blank" rel="noopener noreferrer">
-                                    <TwitterIcon />
+                                <a href="https://twitter.com/TazalinCollege" target="_blank" rel="noopener noreferrer" style={{ transition: 'all 0.3s' }}>
+                                    <TwitterIcon sx={{ fontSize: 32, color: '#EBECFE', '&:hover': { color: '#1da1f2', transform: 'scale(1.2)' } }} />
                                 </a>
-                                <a href="https://www.instagram.com/TazalinCollege" target="_blank" rel="noopener noreferrer">
-                                    <InstagramIcon />
+                                <a href="https://www.instagram.com/TazalinCollege" target="_blank" rel="noopener noreferrer" style={{ transition: 'all 0.3s' }}>
+                                    <InstagramIcon sx={{ fontSize: 32, color: '#EBECFE', '&:hover': { color: '#e4405f', transform: 'scale(1.2)' } }} />
                                 </a>
-                                <a href="https://www.linkedin.com/in/TazalinCollege" target="_blank" rel="noopener noreferrer">
-                                    <LinkedInIcon />
+                                <a href="https://www.linkedin.com/in/TazalinCollege" target="_blank" rel="noopener noreferrer" style={{ transition: 'all 0.3s' }}>
+                                    <LinkedInIcon sx={{ fontSize: 32, color: '#EBECFE', '&:hover': { color: '#0077b5', transform: 'scale(1.2)' } }} />
                                 </a>
                             </Box>
                         </Grid>
