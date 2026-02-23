@@ -66,6 +66,7 @@ const Campus = () => {
                             <img
                                 src={image}
                                 alt={`Campus ${index + 1}`}
+                                loading="lazy"
                                 style={{
                                     width: '100%',
                                     height: '100%',
@@ -86,6 +87,7 @@ const Campus = () => {
                         <img
                             src={selectedImage}
                             alt="Selected Campus"
+                            loading="lazy"
                             style={{
                                 maxHeight: '90%',
                                 maxWidth: '90%',

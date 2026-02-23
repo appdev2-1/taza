@@ -42,6 +42,7 @@ const HeroSection = ({ onApplyClick }) => {
                         <img
                             src={image}
                             alt={`Campus Life ${index + 1}`}
+                            loading="lazy"
                             style={{ width: '100%', height: '80vh', objectFit: 'cover' }}
                         />
                     </div>

@@ -54,15 +54,15 @@ const Testimonials = () => {
 
     return (
         <div className='testimonials'>
-            <img src={nextIcon} alt="Next" className='next-btn' onClick={slideForward} />
-            <img src={backIcon} alt="Back" className='back-btn' onClick={slideBackward} />
+            <img src={nextIcon} alt="Next" className='next-btn' onClick={slideForward} loading="lazy" />
+            <img src={backIcon} alt="Back" className='back-btn' onClick={slideBackward} loading="lazy" />
             <div className="slider">
                 <ul ref={sliderRef}>
                     {testimonialsData.map((testimonial, index) => (
                         <li key={index}>
                             <div className="slide">
                                 <div className="user-info">
-                                    <img src={testimonial.image} alt={`${testimonial.name}`} />
+                                    <img src={testimonial.image} alt={`${testimonial.name}`} loading="lazy" />
                                     <div>
                                         <h3>{testimonial.name}</h3>
                                         <span>{testimonial.location}</span>
