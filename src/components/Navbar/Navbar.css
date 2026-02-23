@@ -1,0 +1,57 @@
+.hamburger {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  width: 30px;
+  height: 24px;
+  cursor: pointer;
+  padding: 0;
+  border: none;
+  background: transparent;
+  transition: all 0.3s ease-in-out;
+}
+
+.hamburger div {
+  width: 30px;
+  height: 3px;
+  background-color: white;
+  border-radius: 2px;
+  transition: all 0.3s ease-in-out;
+}
+
+.hamburger .bar1 {
+  transform: rotate(0) translate(0, 0);
+}
+
+.hamburger .bar2 {
+  opacity: 1;
+}
+
+.hamburger .bar3 {
+  transform: rotate(0) translate(0, 0);
+}
+
+.hamburger.open .bar1 {
+  transform: rotate(45deg) translate(5px, 5px);
+}
+
+.hamburger.open .bar2 {
+  opacity: 0;
+}
+
+.hamburger.open .bar3 {
+  transform: rotate(-45deg) translate(5px, -5px);
+}
+
+/* Drawer Slide-in Animation */
+.MuiDrawer-paper {
+  width: 200px;
+  background-color: #1aff5b;
+  padding-top: 60px;
+}
+
+@media (max-width: 600px) {
+  .MuiDrawer-paper {
+    width: 100%;
+  }
+}

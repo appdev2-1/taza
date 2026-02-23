@@ -1,0 +1,85 @@
+/* Hero.css */
+
+body {
+  margin: 0;
+  font-family: 'Inter', sans-serif; /* Modern font */
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Poppins', sans-serif; /* Modern heading font */
+  margin: 0;
+}
+
+section {
+  padding: 0; /* Remove extra padding */
+  height: 100vh; /* Full height */
+}
+
+.bg-cover {
+  background-size: cover;
+}
+
+.bg-opacity-50 {
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+h1 {
+  color: #fff;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6);
+}
+
+button {
+  background-color: #5b3cc4; /* Modern button color */
+  color: white;
+  transition: background-color 0.3s, transform 0.2s;
+  border: none; /* No border for cleaner look */
+}
+
+button:hover {
+  background-color: #4a2b96; /* Darker shade on hover */
+  transform: scale(1.05); /* Enlarge on hover */
+}
+
+.program-card {
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.program-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+}
+
+footer {
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+footer a {
+  color: #fff;
+  transition: opacity 0.3s;
+}
+
+footer a:hover {
+  opacity: 0.7;
+}
+
+.image-small {
+  width: 100%;
+  height: auto; /* Maintain aspect ratio */
+  max-height: 300px; /* Set a maximum height for uniformity */
+  object-fit: cover; /* Cover the area without distorting the image */
+}
+
+.hero-image {
+  width: 100%;
+  height: 100%; /* Full height */
+  object-fit: contain; /* Ensure the entire image is visible without cropping */
+  border-radius: 10px; /* Rounded corners */
+}
+
+.hero-content {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%); /* Center content */
+  text-align: center; /* Center text */
+}

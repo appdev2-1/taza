@@ -1,0 +1,158 @@
+.programs {
+    margin: 80px auto;
+    width: 90%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.programs img {
+    width: 100%;
+    border-radius: 10px;
+    display: block;
+}
+
+.program {
+    flex-basis: 31%;
+    position: relative;
+}
+
+.caption {
+    border-radius: 10px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    background: rgba(0, 15, 152, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    color: #ffffff;
+    cursor: pointer;
+    opacity: 0;
+    padding-top: 60%;
+    transition: 0.4s;
+    font-family: 'Poppins', sans-serif; /* Enhancing font style */
+    font-size: 1.2rem; /* Increase font size */
+    font-weight: 500; /* Add font weight for emphasis */
+}
+
+.caption img {
+    width: 60px;
+    margin-bottom: 10px;
+}
+
+.program:hover .caption {
+    opacity: 1;
+    padding-top: 0;
+}
+.programs-section {
+    padding: 60px 20px;  /* Padding for spacing */
+    background-color: #f4f7fc;  /* Light background to make the section stand out */
+    text-align: center;  /* Center align the title and content */
+}
+
+.programs-section h1 {
+    font-family: 'Poppins', sans-serif;  /* Modern font for the heading */
+    font-size: 3rem;  /* Larger font size for emphasis */
+    font-weight: 700;  /* Bold heading for visibility */
+    color: #0A1F44;  /* Professional dark blue */
+    margin-bottom: 20px;  /* Spacing below the heading */
+    letter-spacing: 1.5px;  /* Slightly increased letter spacing for clarity */
+    text-transform: uppercase;  /* Make the title uppercase for impact */
+}
+
+.programs-section h1::after {
+    content: "";
+    display: block;
+    width: 100px;  /* Width of the underline */
+    height: 4px;  /* Thickness of the underline */
+    background-color: #0073e6;  /* Accent color */
+    margin: 10px auto;  /* Center the underline below the title */
+    border-radius: 2px;  /* Slightly rounded corners for smoothness */
+}
+
+/* Media Query for smaller screens */
+@media (max-width: 768px) {
+    .programs-section h1 {
+        font-size: 2.2rem;  /* Slightly smaller on mobile for better fit */
+    }
+}
+.location-section {
+    padding: 20px;  /* Add padding for spacing */
+    background-color: #226fef;  /* Light background color */
+    border-radius: 8px;  /* Slightly rounded corners */
+    display: flex;  /* Flexbox for alignment */
+    align-items: center;  /* Vertically center items */
+}
+
+.location-section p {
+    font-family: 'Poppins', sans-serif;  /* Font family for consistency */
+    font-size: 1.2rem;  /* Font size for readability */
+    color: #0A1F40;  /* Color for text */
+    margin: 0;  /* Remove default margin */
+}
+
+.admissions-process h2 {
+    font-family: 'Poppins', sans-serif; /* Clean, modern font */
+    font-size: 2.5rem; /* Larger font size for the heading */
+    font-weight: 600;  /* Semi-bold for emphasis */
+    color: #0A1F44;    /* Professional dark blue color */
+    text-align: center; /* Center align the heading */
+    margin-bottom: 10px; /* Space below the heading */
+    letter-spacing: 1px; /* Slight letter spacing for clarity */
+}
+
+.admissions-process p {
+    font-family: 'Roboto', sans-serif; /* Complementary font for body text */
+    font-size: 1.2rem; /* Slightly larger paragraph text for readability */
+    font-weight: 400;  /* Normal font weight */
+    color: #333;       /* Dark gray for easy reading */
+    text-align: center; /* Center align the paragraph */
+    margin-bottom: 20px; /* Space below the paragraph */
+    line-height: 1.6;  /* Improved line spacing for readability */
+}
+
+.fee-payment h2 {
+    font-family: 'Poppins', sans-serif; /* Modern, clean font */
+    font-size: 2.5rem; /* Larger font for emphasis */
+    font-weight: 600;  /* Semi-bold for better visibility */
+    color: #0A1F44;    /* Dark blue for professionalism */
+    text-align: center; /* Center align for a balanced look */
+    margin-bottom: 20px; /* Add space below the heading */
+    letter-spacing: 1px; /* Slight spacing between letters for clarity */
+}
+
+
+.social-media {
+    display: flex;
+    justify-content: center;
+    gap: 15px; /* Space between icons */
+    font-family: 'Roboto', sans-serif; /* Adding a modern font */
+}
+
+.social-icon {
+    display: flex;
+    align-items: center;
+    color: #333; /* Change this to your desired color */
+    text-decoration: none;
+    font-size: 20px; /* Adjust font size for better readability */
+}
+
+.social-icon:hover {
+    color: #0073e6; /* Change color on hover */
+}
+
+/*======== media query =========*/
+
+@media (max-width: 650px) {
+    .programs {
+        flex-direction: column;
+    }
+    .program {
+        flex-basis: 100%;
+        margin: 20px;
+    }
+}
