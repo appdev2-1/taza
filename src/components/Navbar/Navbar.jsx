@@ -1,63 +1,66 @@
-import React, { useState } from 'react';
-import { AppBar, Toolbar, IconButton, Button, Drawer, List, ListItem, useMediaQuery, Box } from '@mui/material';
+import React, { useState, useEffect } from 'react';
+import { AppBar, Toolbar, IconButton, Button, Drawer, List, ListItem, useMediaQuery, Box, Typography } from '@mui/material';
 import { Link, useLocation } from 'react-router-dom';
 import { useTheme } from '@mui/material/styles';
 import MenuIcon from '@mui/icons-material/Menu';
+import CloseIcon from '@mui/icons-material/Close';
 import { styled } from '@mui/system';
 import logo from '../../assets/logo.jpg';
 
-const GlowingButton = styled(Button)(({ theme }) => ({
-  margin: '10px',
-  padding: '10px 20px',
-  border: 'none',
-  outline: 'none',
+const StyledAppBar = styled(AppBar)(({ scrolled }) => ({
+  background: scrolled ? 'rgba(11, 28, 138, 0.95)' : 'rgba(11, 28, 138, 0.85)',
+  backdropFilter: 'blur(10px)',
+  boxShadow: scrolled ? '0 4px 20px rgba(0, 0, 0, 0.1)' : 'none',
+  transition: 'all 0.3s ease',
+  padding: scrolled ? '5px 0' : '10px 0',
+}));
+
+const NavButton = styled(Button)(({ active }) => ({
+  margin: '0 5px',
+  padding: '8px 20px',
   color: '#FFF',
-  cursor: 'pointer',
+  fontSize: '15px',
+  fontWeight: active ? 600 : 500,
+  borderRadius: '8px',
   position: 'relative',
-  zIndex: 0,
-  borderRadius: '12px',
-  backgroundColor: '#0b0a0a',
-  '&:after': {
-    content: '""',
-    zIndex: -1,
-    position: 'absolute',
-    width: '100%',
-    height: '100%',
-    backgroundColor: '#0d1c9f',
-    left: 0,
-    top: 0,
-    borderRadius: '10px',
-  },
+  overflow: 'hidden',
+  background: active ? 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)' : 'transparent',
+  transition: 'all 0.3s ease',
   '&:before': {
     content: '""',
-    background: 'linear-gradient(45deg, #FF0000, #FF7300, #FFFB00, #48FF00, #00FFD5, #002BFF, #FF00C8, #FF0000)',
     position: 'absolute',
-    top: '-2px',
-    left: '-2px',
-    backgroundSize: '600%',
-    zIndex: -1,
-    width: 'calc(100% + 4px)',
-    height: 'calc(100% + 4px)',
-    filter: 'blur(8px)',
-    animation: 'glowing 20s linear infinite',
-    transition: 'opacity .3s ease-in-out',
-    borderRadius: '10px',
-    opacity: 0,
+    bottom: 0,
+    left: '50%',
+    width: active ? '100%' : '0%',
+    height: '2px',
+    background: '#fff',
+    transform: 'translateX(-50%)',
+    transition: 'width 0.3s ease',
+  },
+  '&:hover': {
+    background: active ? 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)' : 'rgba(255, 255, 255, 0.1)',
+    transform: 'translateY(-2px)',
   },
   '&:hover:before': {
-    opacity: 1,
+    width: '80%',
   },
-  '&:active:after': {
-    background: 'transparent',
+}));
+
+const LogoBox = styled(Box)(({ scrolled }) => ({
+  display: 'flex',
+  alignItems: 'center',
+  gap: '12px',
+  textDecoration: 'none',
+  transition: 'transform 0.3s ease',
+  '&:hover': {
+    transform: 'scale(1.05)',
   },
-  '&:active': {
-    color: '#000',
-    fontWeight: 'bold',
-  },
-  '@keyframes glowing': {
-    '0%': { backgroundPosition: '0 0' },
-    '50%': { backgroundPosition: '400% 0' },
-    '100%': { backgroundPosition: '0 0' },
+  '& img': {
+    width: scrolled ? '60px' : '70px',
+    height: scrolled ? '60px' : '70px',
+    borderRadius: '50%',
+    border: '2px solid rgba(255, 255, 255, 0.3)',
+    transition: 'all 0.3s ease',
   },
 }));
 
@@ -65,7 +68,16 @@ const Navbar = () => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
   const location = useLocation();
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 50);
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
@@ -83,72 +95,93 @@ const Navbar = () => {
   ];
 
   const drawer = (
-      <List onClick={handleDrawerToggle} sx={{ width: 250, pt: 8 }}>
+    <Box sx={{ width: 280, height: '100%', background: 'linear-gradient(180deg, #0b1c8a 0%, #1a2380 100%)' }}>
+      <Box sx={{ display: 'flex', justifyContent: 'flex-end', p: 2 }}>
+        <IconButton onClick={handleDrawerToggle} sx={{ color: '#fff' }}>
+          <CloseIcon />
+        </IconButton>
+      </Box>
+      <List sx={{ px: 2 }}>
         {navItems.map((item) => (
-          <ListItem key={item.path} sx={{ py: 0 }}>
-            <GlowingButton 
-              component={Link} 
+          <ListItem key={item.path} sx={{ py: 1, px: 0 }}>
+            <Button
+              component={Link}
               to={item.path}
               fullWidth
+              onClick={handleDrawerToggle}
               sx={{
+                color: '#fff',
                 justifyContent: 'flex-start',
-                backgroundColor: isActive(item.path) ? '#1a2380' : '#0b0a0a',
+                padding: '12px 20px',
+                borderRadius: '8px',
+                fontSize: '16px',
+                fontWeight: isActive(item.path) ? 600 : 500,
+                background: isActive(item.path) ? 'rgba(255, 255, 255, 0.15)' : 'transparent',
+                '&:hover': {
+                  background: 'rgba(255, 255, 255, 0.1)',
+                },
               }}
             >
               {item.label}
-            </GlowingButton>
+            </Button>
           </ListItem>
         ))}
       </List>
+    </Box>
   );
 
   return (
-      <AppBar position="fixed" sx={{ 
-        boxShadow: 'none', 
-        padding: '10px 0', 
-        backgroundColor: '#0b1c8a',
-        backdropFilter: 'blur(10px)',
-        transition: 'all 0.3s ease'
-      }}>
-        <Toolbar sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <Box component={Link} to="/" sx={{ display: 'flex', alignItems: 'center', textDecoration: 'none' }}>
-            <img src={logo} alt="Logo" style={{ width: '80px', height: '80px', objectFit: 'contain' }} />
-          </Box>
-
-          {isMobile ? (
-              <>
-                <IconButton edge="start" color="inherit" aria-label="menu" onClick={handleDrawerToggle}>
-                  <MenuIcon style={{ fontSize: '30px' }} />
-                </IconButton>
-                <Drawer 
-                  anchor="right" 
-                  open={mobileOpen} 
-                  onClose={handleDrawerToggle}
-                  PaperProps={{
-                    sx: { backgroundColor: '#0b1c8a' }
-                  }}
-                >
-                  {drawer}
-                </Drawer>
-              </>
-          ) : (
-              <>
-                {navItems.map((item) => (
-                  <GlowingButton 
-                    key={item.path}
-                    component={Link} 
-                    to={item.path}
-                    sx={{
-                      backgroundColor: isActive(item.path) ? '#1a2380' : '#0b0a0a',
-                    }}
-                  >
-                    {item.label}
-                  </GlowingButton>
-                ))}
-              </>
+    <StyledAppBar position="fixed" scrolled={scrolled}>
+      <Toolbar sx={{ display: 'flex', justifyContent: 'space-between', maxWidth: '1400px', width: '100%', mx: 'auto', px: { xs: 2, md: 4 } }}>
+        <LogoBox component={Link} to="/" scrolled={scrolled}>
+          <img src={logo} alt="Tazalin College" loading="eager" />
+          {!isMobile && (
+            <Typography variant="h6" sx={{ color: '#fff', fontWeight: 700, letterSpacing: '0.5px' }}>
+              Tazalin College
+            </Typography>
           )}
-        </Toolbar>
-      </AppBar>
+        </LogoBox>
+
+        {isMobile ? (
+          <>
+            <IconButton
+              edge="end"
+              color="inherit"
+              aria-label="menu"
+              onClick={handleDrawerToggle}
+              sx={{
+                '&:hover': { background: 'rgba(255, 255, 255, 0.1)' },
+              }}
+            >
+              <MenuIcon sx={{ fontSize: '32px' }} />
+            </IconButton>
+            <Drawer
+              anchor="right"
+              open={mobileOpen}
+              onClose={handleDrawerToggle}
+              PaperProps={{
+                sx: { background: 'transparent' },
+              }}
+            >
+              {drawer}
+            </Drawer>
+          </>
+        ) : (
+          <Box sx={{ display: 'flex', alignItems: 'center' }}>
+            {navItems.map((item) => (
+              <NavButton
+                key={item.path}
+                component={Link}
+                to={item.path}
+                active={isActive(item.path) ? 1 : 0}
+              >
+                {item.label}
+              </NavButton>
+            ))}
+          </Box>
+        )}
+      </Toolbar>
+    </StyledAppBar>
   );
 };
 

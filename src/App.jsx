@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { BrowserRouter as Router, Route, Routes, useLocation } from 'react-router-dom';
 import Navbar from './components/Navbar/Navbar';
 import Hero from './components/Hero/Homepage';
 import Programs from './components/Programs/Programs';
@@ -13,14 +13,33 @@ import ApplicationForm from './components/Hero/ApplicationForm';
 import AutoBot from './components/Hero/AutoBot';
 import StickyApplyButton from './components/StickyApplyButton';
 import BackToTop from './components/BackToTop';
+import PageLoader from './components/PageLoader';
 
+const ScrollToTop = () => {
+    const { pathname } = useLocation();
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    }, [pathname]);
+    return null;
+};
 
-const App = () => {
+const AppContent = () => {
     const [playState, setPlayState] = useState(false);
+    const [loading, setLoading] = useState(false);
+    const location = useLocation();
+
+    useEffect(() => {
+        setLoading(true);
+        const timer = setTimeout(() => setLoading(false), 800);
+        return () => clearTimeout(timer);
+    }, [location.pathname]);
+
+    if (loading) return <PageLoader />;
 
     return (
-        <Router basename="/">
+        <>
             <Navbar />
+            <ScrollToTop />
             <Routes>
                 <Route path="/" element={<Hero />} />
                 <Route path="/homepage" element={<Hero />} />
@@ -69,12 +88,28 @@ const App = () => {
                     }
                 />
                 <Route path="/apply" element={<ApplicationForm />} />
-
             </Routes>
             <Footer />
-        <AutoBot/>
-        <StickyApplyButton />
-        <BackToTop />
+            <AutoBot />
+            <StickyApplyButton />
+            <BackToTop />
+        </>
+    );
+};
+
+const App = () => {
+    const [initialLoading, setInitialLoading] = useState(true);
+
+    useEffect(() => {
+        const timer = setTimeout(() => setInitialLoading(false), 1500);
+        return () => clearTimeout(timer);
+    }, []);
+
+    if (initialLoading) return <PageLoader />;
+
+    return (
+        <Router basename="/">
+            <AppContent />
         </Router>
     );
 };

@@ -1,0 +1,30 @@
+/* Image Optimization Styles */
+
+/* Prevent layout shift during image loading */
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Hardware acceleration for smooth transforms */
+.program-card,
+.slide,
+.ImageContainer {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+/* Optimize hover effects */
+.program-card:hover {
+  transform: translateZ(0) scale(1.05);
+}
+
+.ImageContainer:hover img {
+  transform: scale(1.1);
+}
+
+/* Prevent image flickering */
+img {
+  -webkit-backface-visibility: hidden;
+  -moz-backface-visibility: hidden;
+}

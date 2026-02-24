@@ -42,7 +42,7 @@ const HeroSection = ({ onApplyClick }) => {
                         <img
                             src={image}
                             alt={`Campus Life ${index + 1}`}
-                            loading="lazy"
+                            loading={index === 0 ? "eager" : "lazy"}
                             style={{ width: '100%', height: '80vh', objectFit: 'cover' }}
                         />
                     </div>
@@ -99,10 +99,11 @@ const ProgramCard = ({ imageUrl, title, details }) => (
     <Grid item xs={12} md={4}>
         <Box
             sx={{
-                padding: 2,
+                p: 2,
                 backgroundColor: '#f4f4f4',
                 textAlign: 'center',
                 borderRadius: '12px',
+                height: '100%',
                 transition: 'all 0.3s ease',
                 '&:hover': {
                     backgroundColor: '#fff',
@@ -111,9 +112,9 @@ const ProgramCard = ({ imageUrl, title, details }) => (
                 },
             }}
         >
-            <img src={imageUrl} alt={title} width="100%" loading="lazy" style={{ borderRadius: '8px' }}/>
-            <Typography variant="h6" sx={{ mt: 2, fontWeight: 'bold' }}>{title}</Typography>
-            <Box component="ul" sx={{ textAlign: 'left', pl: 2 }}>
+            <img src={imageUrl} alt={title} width="100%" loading="lazy" style={{ borderRadius: '8px', height: '200px', objectFit: 'cover' }}/>
+            <Typography variant="h6" sx={{ mt: 2, mb: 1, fontWeight: 'bold' }}>{title}</Typography>
+            <Box component="ul" sx={{ textAlign: 'left', pl: 2, m: 0 }}>
                 {details}
             </Box>
         </Box>
@@ -122,8 +123,8 @@ const ProgramCard = ({ imageUrl, title, details }) => (
 
 const Programs = () => {
     return (
-        <Container sx={{ padding: '32px 0' }}>
-            <Typography variant="h4" align="center" gutterBottom>
+        <Container sx={{ py: 4, mt: -2 }}>
+            <Typography variant="h4" align="center" gutterBottom sx={{ mb: 3 }}>
                 Our Programs
             </Typography>
             <Grid container spacing={3}>
@@ -161,7 +162,7 @@ const HomePage = () => {
             <HeroSection onApplyClick={() => setShowForm(true)} />
             {showForm && <ApplicationForm />}
             <Programs />
-            <Box sx={{ padding: '24px 0', backgroundColor: '#030e73', color: '#ffffff' }}>
+            <Box sx={{ py: 3, backgroundColor: '#030e73', color: '#ffffff' }}>
                 <Container>
                     <Grid container spacing={3}>
                         <Grid item xs={12} sm={4}>

@@ -1,0 +1,25 @@
+/* Custom Loading Animation */
+.loader {
+  height: 80px;
+  aspect-ratio: 1;
+  padding: 10px;
+  border-radius: 50%;
+  box-sizing: border-box;
+  position: relative;
+  mask: conic-gradient(#000 0 0) content-box exclude, conic-gradient(#000 0 0);
+  filter: blur(12px);
+}
+
+.loader:before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: conic-gradient(#0000 35%, #667eea, #0000 65%);
+  animation: loaderSpin 1.5s linear infinite;
+}
+
+@keyframes loaderSpin {
+  to {
+    rotate: 1turn;
+  }
+}

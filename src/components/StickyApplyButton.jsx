@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Fab, Zoom } from '@mui/material';
+import { Fab, Zoom, Tooltip } from '@mui/material';
 import { Link } from 'react-router-dom';
 import SchoolIcon from '@mui/icons-material/School';
 
@@ -16,25 +16,29 @@ const StickyApplyButton = () => {
 
   return (
     <Zoom in={visible}>
-      <Fab
-        component={Link}
-        to="/apply"
-        color="primary"
-        sx={{
-          position: 'fixed',
-          bottom: 24,
-          right: 24,
-          zIndex: 1000,
-          background: 'linear-gradient(45deg, #212EA0 30%, #0b1c8a 90%)',
-          '&:hover': {
-            transform: 'scale(1.1)',
-            boxShadow: '0 8px 24px rgba(33, 46, 160, 0.4)',
-          },
-        }}
-        aria-label="apply now"
-      >
-        <SchoolIcon />
-      </Fab>
+      <Tooltip title="Apply Now" placement="left" arrow>
+        <Fab
+          component={Link}
+          to="/apply"
+          sx={{
+            position: 'fixed',
+            bottom: 90,
+            right: 24,
+            zIndex: 1000,
+            background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+            color: '#fff',
+            boxShadow: '0 4px 20px rgba(102, 126, 234, 0.4)',
+            '&:hover': {
+              transform: 'scale(1.1)',
+              boxShadow: '0 8px 30px rgba(102, 126, 234, 0.6)',
+            },
+            transition: 'all 0.3s ease',
+          }}
+          aria-label="apply now"
+        >
+          <SchoolIcon />
+        </Fab>
+      </Tooltip>
     </Zoom>
   );
 };
